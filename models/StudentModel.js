@@ -9,4 +9,4 @@ const studentSchema = new mongoose.Schema({
     ra: String,
 });
 
-export default mongoose.model('alunos', studentSchema);
+export default mongoose.model('students', studentSchema);
