@@ -29,11 +29,17 @@ export async function readStudentById(studentId) {
 
 export async function updateStudent(studentId, studentData) {
     try {
-        const student = await Student.findByIdAndUpdate(studentId, studentData, { new: true });
-        if (!student) throw new Error('Student not found.');
+        // { runValidators: true }: regras de validação definidas no seu Schema do Mongoose executadas durante a atualização.
+        const student = await Student.findByIdAndUpdate(studentId, studentData, { new: true, runValidators: true });
+        if (!student){
+            // Erro para o 404.
+            const notFoundError = new Error('Student not found');
+            notFoundError.name = 'NotFoundError'; // Nome customizado.
+            throw notFoundError;
+        }
         return student;
     } catch (error) {
-        throw new Error('Error while trying to update student data.');
+        throw error;
     }
 }
 
