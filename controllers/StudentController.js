@@ -65,3 +65,22 @@ export async function modifyStudent(req, res) {
         res.status(500).json({ error: 'Internal server error.' })
     }
 }
+
+export async function removeStudent(req, res) {
+    try {
+        await StudentService.deleteStudent(req.params.id);
+
+        //204 No Content é o código HTTP ideal para DELETE.
+        return res.status(204).end();
+    } catch (error) {
+
+        // 404: Not Found.
+        if (error.name === 'NotFoundError') {
+            console.warn(`Attempted to delete non-existent student ID: ${req.params.id}`);
+            return res.status(404).json({ error: error.message });
+        }
+
+        console.error(`Error deleting student ID ${req.params.id}:`, error.message);
+        res.status(500).json({ error: 'Internal server error.' });
+    }
+}
