@@ -9,7 +9,7 @@ export async function createStudent(studentData) {
     }
 }
 
-export async function getAllStudents() {
+export async function readAllStudents() {
     try {
         const students = await Student.find();
         return students;
@@ -18,7 +18,7 @@ export async function getAllStudents() {
     }
 }
 
-export async function findStudentById(studentId) {
+export async function readStudentById(studentId) {
     try {
         const student = await Student.findById(studentId);
         return student;
