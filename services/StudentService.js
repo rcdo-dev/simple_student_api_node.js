@@ -5,7 +5,7 @@ export async function createStudent(studentData) {
         const student = await Student.create(studentData);
         return student;
     } catch (error) {
-        throw new Error('Error while trying to register the student.');
+        throw error;
     }
 }
 
@@ -14,7 +14,7 @@ export async function readAllStudents() {
         const students = await Student.find();
         return students;
     } catch (error) {
-        throw new Error('Error while trying to retrieve all students.');
+        throw error;
     }
 }
 
@@ -23,7 +23,7 @@ export async function readStudentById(studentId) {
         const student = await Student.findById(studentId);
         return student;
     } catch (error) {
-        throw new Error('Student not found.');
+        throw error;
     }
 }
 

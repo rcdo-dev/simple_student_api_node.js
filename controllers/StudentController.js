@@ -5,16 +5,24 @@ export async function insertStudent(req, res) {
         const student = await StudentService.createStudent(req.body);
         if (student) {
             res.status(201).json(student);
-        } else {
-            res.status(400).json({ error: 'Failed to create student.' })
         }
     } catch (error) {
+
+        // 400: Bad Request (Erro de validação do Mongoose).
+        if (error.name === 'ValidationError') {
+            console.warn('Validation Error registering student:', error.message);
+            return res.status(400).json({
+                error: 'Invalid data provided.',
+                details: error.message
+            });
+        }
+
         console.error('Error registering student.', error.message);
         res.status(500).json({ error: 'Internal server error.' });
     }
 }
 
-export async function getAllStudents(res) {
+export async function getAllStudents(req, res) {
     try {
         const students = await StudentService.readAllStudents();
         res.status(200).json(students);
@@ -46,7 +54,7 @@ export async function modifyStudent(req, res) {
         }
     } catch (error) {
 
-        // 400: Bad Request.
+        // 400: Bad Request (Erro de validação do Mongoose).
         if (error.name === 'ValidationError') {
             console.warn(`Validation Error for ID ${req.params.id}:`, error.message);
             return res.status(400).json({
