@@ -8,10 +8,12 @@ services:
   app:
     # Constrói a imagem usando o Dockerfile no diretório atual
     build: .
-    
+    # Nomeando o container
+    container_name: simple-api-students
     # Mapeia a porta do contêiner (3000) para a porta da sua máquina local (3000)
     ports:
       - "3000:3000"
+      - "27017:27017"
       
     # Garante que o banco de dados inicie antes da aplicação
     depends_on:
@@ -31,12 +33,11 @@ services:
   mongodb:
     # Usa a imagem oficial do MongoDB
     image: mongo:latest
-    
+    # Nomeando o container
+    container_name: mongodb-server
     # Cria um volume para persistir os dados do banco de dados
     volumes:
       - mongo-data:/data/db
-      
-    # NÃO precisamos expor a porta 27017 para o host, apenas para a rede interna
     
     # Conecta o serviço à rede interna
     networks:
