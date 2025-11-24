@@ -1,0 +1,57 @@
+version: '3.8'
+
+# --------------------------------------------------------------------
+# A seção de serviços define os dois contêineres
+# --------------------------------------------------------------------
+services:
+  ### 1. Serviço da Aplicação Node.js
+  app:
+    # Constrói a imagem usando o Dockerfile no diretório atual
+    build: .
+    
+    # Mapeia a porta do contêiner (3000) para a porta da sua máquina local (3000)
+    ports:
+      - "3000:3000"
+      
+    # Garante que o banco de dados inicie antes da aplicação
+    depends_on:
+      - mongodb
+      
+    # Variáveis de ambiente
+    environment:
+      # A CHAVE DA COMUNICAÇÃO: 'mongodb' é o nome do serviço do Docker Compose
+      MONGODB_URI: "mongodb://mongodb:27017/college"
+      NODE_ENV: development
+      
+    # Conecta o serviço à rede interna
+    networks:
+      - app-network
+
+  ### 2. Serviço do Banco de Dados MongoDB
+  mongodb:
+    # Usa a imagem oficial do MongoDB
+    image: mongo:latest
+    
+    # Cria um volume para persistir os dados do banco de dados
+    volumes:
+      - mongo-data:/data/db
+      
+    # NÃO precisamos expor a porta 27017 para o host, apenas para a rede interna
+    
+    # Conecta o serviço à rede interna
+    networks:
+      - app-network
+
+# --------------------------------------------------------------------
+# A seção de redes (garante a comunicação interna)
+# --------------------------------------------------------------------
+networks:
+  app-network:
+    driver: bridge # Rede padrão para comunicação entre contêineres
+
+# --------------------------------------------------------------------
+# A seção de volumes (garante a persistência dos dados)
+# --------------------------------------------------------------------
+volumes:
+  mongo-data:
+    driver: local
