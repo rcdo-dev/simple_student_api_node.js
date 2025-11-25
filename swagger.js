@@ -7,7 +7,7 @@ const options = {
         info: {
             title: 'Students API',
             version: '1.0.0',
-            description: 'API documentada usando Swagger'
+            description: 'API Documentation'
         },
     },
     apis: ['./routes/StudentRoute.js']
