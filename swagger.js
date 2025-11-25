@@ -13,6 +13,5 @@ const options = {
     apis: ['./routes/StudentRoute.js']
 };
 
-const swaggerSpec = swaggerJsdoc(options);
-
-export default { swaggerUi, swaggerSpec }
+export const swaggerSpec = swaggerJsdoc(options);
+export {swaggerUi};
