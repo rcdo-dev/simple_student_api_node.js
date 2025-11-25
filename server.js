@@ -3,13 +3,15 @@ import mongoose from 'mongoose'
 import cors from 'cors'
 import 'dotenv/config'
 import StudentRoutes from './routes/StudentRoute.js'
+import { swaggerUi, swaggerSpec } from './swagger.js'
 
-const app = express()
-app.use(cors())
-app.use(express.json())
+const app = express();
+app.use(cors());
+app.use(express.json());
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-const uri = process.env.MONGODB_URI
-const port = process.env.PORT
+const uri = process.env.MONGODB_URI;
+const port = process.env.PORT;
 
 mongoose
     .connect(uri)
@@ -17,20 +19,20 @@ mongoose
     .catch((err) => {
         console.error('Erro ao conectar ao MongoDB:', err)
         process.exit(1)
-    })
+    });
 
 app.get('/', (req, res) => res.json({
     ok: true,
     msg: 'Servidor Funcionando'
-}))
+}));
 
-app.use(StudentRoutes)
+app.use(StudentRoutes);
 
 app.use((err, req, res, next) => {
     console.error(err)
     res.status(err.status || 500).json({
         error: err.message || 'Erro Inteno'
     })
-})
+});
 
-app.listen(port, () => console.log("http://localhost: " + port))
+app.listen(port, () => console.log("http://localhost: " + port));
